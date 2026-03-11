@@ -21,7 +21,7 @@ Include:
 
   try {
 
-    const completion = await groq.chat.completions.create({
+    const response = await groq.chat.completions.create({
       model: "llama-3.3-70b-versatile",
       messages: [
         {
@@ -29,16 +29,19 @@ Include:
           content: prompt
         }
       ],
+      max_tokens: 800,
       temperature: 0.5
     });
 
-    return completion.choices[0].message.content;
+    return response.choices[0].message.content;
 
   } catch (error) {
 
-    console.error("Groq API error:", error);
-    throw new Error("AI summary generation failed");
+    console.error("Groq API error:", error.response?.data || error.message);
 
+    throw new Error(
+      error.response?.data?.error?.message || "AI summary generation failed"
+    );
   }
 }
 
