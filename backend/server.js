@@ -11,7 +11,14 @@ const swaggerSpec = require("./swagger")
 
 const app = express()
 
-app.use(cors())
+app.use(
+  cors({
+    origin: [
+      "http://localhost:5173",
+      "https://rabbitt-ai-assignment.vercel.app"
+    ],
+  })
+)
 app.use(express.json())
 app.use(helmet())
 

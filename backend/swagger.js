@@ -6,15 +6,20 @@ const options = {
     info: {
       title: "Sales Insight Automator API",
       version: "1.0.0",
-      description: "API for uploading sales data and generating AI summary"
+      description: "API for uploading sales data and generating AI summary",
     },
     servers: [
       {
-        url: "http://localhost:5000"
-      }
-    ]
+        url: "http://localhost:5000",
+        description: "Local development server",
+      },
+      {
+        url: "https://rabbitt-ai-assignment.vercel.app",
+        description: "Production server",
+      },
+    ],
   },
-  apis: ["./routes/*.js"]
+  apis: ["./routes/*.js"],
 };
 
 const swaggerSpec = swaggerJsdoc(options);
