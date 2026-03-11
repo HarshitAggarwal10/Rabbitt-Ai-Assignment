@@ -1,6 +1,11 @@
-const axios = require("axios");
+const Groq = require("groq-sdk");
+
+const groq = new Groq({
+  apiKey: process.env.GROQ_API_KEY
+});
 
 async function generateSalesSummary(data) {
+
   const prompt = `
 Analyze the following sales dataset and generate a concise executive summary.
 
@@ -16,57 +21,23 @@ Provide insights such as:
 
   try {
 
-    const response = await axios.post(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent",
-      {
-        contents: [
-          {
-            parts: [{ text: prompt }]
-          }
-        ]
-      },
-      {
-        headers: {
-          "Content-Type": "application/json",
-          "x-goog-api-key": process.env.GEMINI_API_KEY
-        },
-        timeout: 30000
-      }
-    );
+    const completion = await groq.chat.completions.create({
+      messages: [
+        {
+          role: "user",
+          content: prompt
+        }
+      ],
+      model: "llama3-8b-8192"
+    });
 
-    return response.data.candidates[0].content.parts[0].text;
+    return completion.choices[0].message.content;
 
   } catch (error) {
 
-    console.error("Gemini API error:", error.response?.data || error.message);
-
-    // retry once if Gemini returns 503
-    if (error.response && error.response.status === 503) {
-
-      console.log("Retrying Gemini request...");
-
-      const retry = await axios.post(
-        "https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent",
-        {
-          contents: [
-            {
-              parts: [{ text: prompt }]
-            }
-          ]
-        },
-        {
-          headers: {
-            "Content-Type": "application/json",
-            "x-goog-api-key": process.env.GEMINI_API_KEY
-          },
-          timeout: 30000
-        }
-      );
-
-      return retry.data.candidates[0].content.parts[0].text;
-    }
-
+    console.error("Groq API error:", error);
     throw new Error("AI summary generation failed");
+
   }
 }
 
