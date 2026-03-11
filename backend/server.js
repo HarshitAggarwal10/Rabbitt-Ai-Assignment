@@ -15,10 +15,12 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "https://rabbitt-ai-assignment.vercel.app"
+      "https://rabbitt-ai-assignment.vercel.app",
+      "https://rabbitt-ai-assignment.onrender.com"
     ],
   })
 )
+
 app.use(express.json())
 app.use(helmet())
 

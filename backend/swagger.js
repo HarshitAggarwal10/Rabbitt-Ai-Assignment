@@ -14,7 +14,7 @@ const options = {
         description: "Local development server",
       },
       {
-        url: "https://rabbitt-ai-assignment.vercel.app",
+        url: "https://rabbitt-ai-assignment.onrender.com",
         description: "Production server",
       },
     ],
