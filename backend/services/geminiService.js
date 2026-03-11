@@ -21,8 +21,8 @@ Include:
 
   try {
 
-    const response = await groq.chat.completions.create({
-      model: "llama-3.1-8b-instant",
+    const completion = await groq.chat.completions.create({
+      model: "llama-3.3-70b-versatile",
       messages: [
         {
           role: "user",
@@ -32,13 +32,13 @@ Include:
       temperature: 0.5
     });
 
-    return response.choices[0].message.content;
+    return completion.choices[0].message.content;
 
   } catch (error) {
 
-    console.error("Groq API error:", error.response?.data || error.message);
-
+    console.error("Groq API error:", error);
     throw new Error("AI summary generation failed");
+
   }
 }
 
