@@ -12,32 +12,33 @@ Analyze the following sales dataset and generate a concise executive summary.
 Sales Data:
 ${JSON.stringify(data)}
 
-Provide insights such as:
+Include:
 - top performing region
-- category performance
+- category trends
 - anomalies
-- strategic recommendations
+- recommendations
 `;
 
   try {
 
-    const completion = await groq.chat.completions.create({
+    const response = await groq.chat.completions.create({
+      model: "llama-3.1-8b-instant",
       messages: [
         {
           role: "user",
           content: prompt
         }
       ],
-      model: "llama3-8b-8192"
+      temperature: 0.5
     });
 
-    return completion.choices[0].message.content;
+    return response.choices[0].message.content;
 
   } catch (error) {
 
-    console.error("Groq API error:", error);
-    throw new Error("AI summary generation failed");
+    console.error("Groq API error:", error.response?.data || error.message);
 
+    throw new Error("AI summary generation failed");
   }
 }
 
