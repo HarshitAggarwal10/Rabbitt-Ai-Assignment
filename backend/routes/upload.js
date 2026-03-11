@@ -9,6 +9,49 @@ const router = express.Router();
 const storage = multer.memoryStorage();
 const upload = multer({ storage });
 
+/**
+ * @swagger
+ * /api/upload:
+ *   post:
+ *     summary: Upload CSV/XLSX sales data and generate AI summary
+ *     description: Upload a sales dataset and receive an AI-generated executive summary via email.
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         multipart/form-data:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - file
+ *               - email
+ *             properties:
+ *               file:
+ *                 type: string
+ *                 format: binary
+ *                 description: Sales dataset file (CSV or XLSX)
+ *               email:
+ *                 type: string
+ *                 example: user@example.com
+ *                 description: Email where the AI summary will be sent
+ *     responses:
+ *       200:
+ *         description: AI summary generated and email sent successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 summary:
+ *                   type: string
+ *       400:
+ *         description: File missing or invalid input
+ *       500:
+ *         description: Internal server error
+ */
+
 router.post("/upload", upload.single("file"), async (req, res) => {
 
   try {
